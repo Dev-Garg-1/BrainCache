@@ -58,3 +58,6 @@ coverage/
 # TypeScript declaration files (optional)
 *.d.ts
 *.d.ts.map
+
+# Except for env.d.ts file
+!env.d.ts
