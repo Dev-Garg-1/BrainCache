@@ -59,5 +59,6 @@ coverage/
 *.d.ts
 *.d.ts.map
 
-# Except for env.d.ts file
+# Except for the following
 !env.d.ts
+!express.d.ts

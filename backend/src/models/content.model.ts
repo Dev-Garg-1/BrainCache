@@ -1,6 +1,14 @@
-import mongoose, {Schema} from "mongoose"
+import mongoose, {Schema, Types} from "mongoose"
 
-const contentSchema = new Schema(
+interface IContent {
+    _id: Types.ObjectId;
+    title: string;
+    link: string;
+    description?: string;
+    userId: Schema.Types.ObjectId
+}
+
+const contentSchema = new Schema<IContent>(
     {
         title: {
             type: String,
@@ -26,4 +34,4 @@ const contentSchema = new Schema(
     }
 )
 
-export const Content = mongoose.model("Content", contentSchema);
+export const Content = mongoose.model<IContent>("Content", contentSchema);

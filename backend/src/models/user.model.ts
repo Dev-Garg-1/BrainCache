@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -9,7 +9,19 @@ import {
     REFRESH_TOKEN_SECRET 
 } from "../config/config.js";
 
-const userSchema = new Schema(
+interface IUser {
+    _id: Types.ObjectId;
+    username: string;
+    email: string;
+    name: string;
+    password: string;
+    refreshToken: string;
+    generateAccessToken: () => string;
+    generateRefreshToken: () => string;
+    isPasswordCorrect: (password: string) => Promise<boolean>
+}
+
+const userSchema = new Schema<IUser>(
     {
         username: {
             type: String,
@@ -78,7 +90,7 @@ userSchema.methods.generateAccessToken = function () {
 }
 
 // function(method) for generating the refresh token.
-userSchema.methods.generateRefreshToken = async function () {
+userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         {
             _id: this._id
@@ -92,4 +104,4 @@ userSchema.methods.generateRefreshToken = async function () {
     )
 }
 
-export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model<IUser>("User", userSchema);
