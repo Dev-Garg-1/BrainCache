@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -9,17 +9,8 @@ import {
     REFRESH_TOKEN_SECRET 
 } from "../config/config.js";
 
-interface IUser {
-    _id: Types.ObjectId;
-    username: string;
-    email: string;
-    name: string;
-    password: string;
-    refreshToken: string;
-    generateAccessToken: () => string;
-    generateRefreshToken: () => string;
-    isPasswordCorrect: (password: string) => Promise<boolean>
-}
+import type { IUser } from "../utils/interfaces.js";
+
 
 const userSchema = new Schema<IUser>(
     {

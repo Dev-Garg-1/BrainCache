@@ -1,12 +1,6 @@
-import mongoose, {Schema, Types} from "mongoose"
+import mongoose, {Schema} from "mongoose"
+import type { IContent } from "../utils/interfaces.js";
 
-interface IContent {
-    _id: Types.ObjectId;
-    title: string;
-    link: string;
-    description?: string;
-    userId: Schema.Types.ObjectId
-}
 
 const contentSchema = new Schema<IContent>(
     {
