@@ -14,7 +14,8 @@ type AuthCardProps = {
   description: string
   buttonText: string
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
-  children: React.ReactNode
+  children: React.ReactNode,
+  loading: boolean
 }
 
 export default function AuthCard({
@@ -22,25 +23,33 @@ export default function AuthCard({
   description,
   buttonText,
   onSubmit,
-  children
+  children,
+  loading
 }: AuthCardProps) {
   return (
     <Card className="w-full max-w-sm">
+
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>
+          {title}
+        </CardTitle>
+
         <CardDescription>
           {description}
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={onSubmit}>
           {children}
+
+          <Button type="submit" className="w-full mt-4" disabled={loading}>
+            {loading ? "Please wait" : buttonText}
+          </Button>
         </form>
       </CardContent>
+
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
-          {buttonText}
-        </Button>
         {
         buttonText === "Login" ? 
         <div className="mt-4 text-center text-sm">
@@ -57,7 +66,6 @@ export default function AuthCard({
           </a>
         </div>
         }
-        
       </CardFooter>
     </Card>
   )
