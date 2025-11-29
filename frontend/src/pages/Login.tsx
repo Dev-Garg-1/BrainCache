@@ -1,6 +1,7 @@
 import AuthCard from "@/components/neo/AuthCard";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAuth } from "@/context/AuthContext";
 import { loginApi } from "@/services/api/auth";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -11,6 +12,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const {setUser} = useAuth();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,6 +33,10 @@ export default function Login() {
             );
 
             console.log("Login successfull: ", res.data);
+
+            const user = res.data.data.user;
+            setUser(user);
+            localStorage.setItem('user', JSON.stringify(user));
 
             toast.success("Logged in successfully !");
             navigate("/dashboard")
