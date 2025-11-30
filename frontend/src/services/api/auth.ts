@@ -15,3 +15,5 @@ export interface SignupData {
 export const loginApi = (data: LoginData) => http.post("/auth/login", data);
 
 export const signupApi = (data: SignupData) => http.post("/auth/signup", data)
+
+export const logoutApi = () => http.post("/auth/logout");
