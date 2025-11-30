@@ -1,5 +1,4 @@
-import Plus from "@/components/icons/Plus";
-import Share from "@/components/icons/Share";
+import {Plus, Share} from "@/components/icons/icons"
 import Card from "@/components/myComp/Card";
 import SideBar from "@/components/myComp/Sidebar";
 import { getContentApi } from "@/services/api/content";

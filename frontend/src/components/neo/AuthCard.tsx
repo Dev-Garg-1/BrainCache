@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Link } from "react-router-dom"
 
 
 type AuthCardProps = {
@@ -54,16 +55,12 @@ export default function AuthCard({
         buttonText === "Login" ? 
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
-          <a href="#" className="underline underline-offset-4">
-            Sign up
-          </a>
+          <Link to={"/signup"} className="underline underline-offset-4">SignUp</Link>
         </div>
         : 
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
-          <a href="#" className="underline underline-offset-4">
-            Login
-          </a>
+          <Link to={"/login"} className="underline underline-offset-4">Login</Link>
         </div>
         }
       </CardFooter>

@@ -51,7 +51,7 @@ export default function Signup() {
     }
 
     return (
-        <div className="min-h-screen flex justify-center items-center">
+        <div className="flex-1 flex justify-center items-center">
             <AuthCard
             title={"SignUp to create an account."}
             description={"Enter the following details."}

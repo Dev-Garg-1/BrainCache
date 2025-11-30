@@ -5,38 +5,54 @@ import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute'
 import { useAuth } from './context/AuthContext'
+import LandingPage from './pages/LandingPage'
+import Navbar from './components/Navbar'
 
 function App() {
 
   const {user} = useAuth();
 
+  const hiddenNavbarOnRoutes = ['/dashboard']
+
+  const shouldHideNavbar = hiddenNavbarOnRoutes.includes(location.pathname);
+
   return (
-    <Router>
-      <Routes>
+    <div className='flex flex-col min-h-screen'>
+      {!shouldHideNavbar && <Navbar />}
 
-        <Route 
-        path='/login' 
-        element={
-        !user ? <Login /> : <Navigate to='/dashboard' />
-        } />
+      <Router>
+        <Routes>
 
-        <Route 
-        path='/signup' 
-        element={
-        !user ? <Signup /> : <Navigate to='/dashboard' />
-        } />
+          <Route 
+          path='/login' 
+          element={
+          !user ? <Login /> : <Navigate to='/dashboard' />
+          } />
 
-        <Route 
-        path='/dashboard'
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }
-        />
+          <Route 
+          path='/signup' 
+          element={
+          !user ? <Signup /> : <Navigate to='/dashboard' />
+          } />
 
-      </Routes>
-    </Router>
+          <Route 
+          path='/home' 
+          element={
+          !user ? <LandingPage /> : <Navigate to='/dashboard' />
+          } />
+
+          <Route 
+          path='/dashboard'
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+          />
+
+        </Routes>
+      </Router>
+    </div>
   )
 }
 

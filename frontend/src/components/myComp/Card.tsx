@@ -1,7 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
-import Delete from "../icons/Delete";
-import Share from "../icons/Share";
-import Update from "../icons/Update";
+import {Delete, Share, Update} from "../icons/icons"
 import { deleteContentApi } from "@/services/api/content";
 import toast from "react-hot-toast";
 

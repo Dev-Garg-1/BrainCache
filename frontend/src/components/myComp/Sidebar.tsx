@@ -1,11 +1,6 @@
 
 import { useAuth } from "@/context/AuthContext";
-import Brain from "../icons/Brain";
-import Document from "../icons/Document";
-import Hashtag from "../icons/Hashtag";
-import Link from "../icons/Link";
-import Twitter from "../icons/Twitter";
-import Youtube from "../icons/Youtube";
+import {Brain, Document, Hashtag, Link, Twitter, Youtube} from "../icons/icons"
 import { LogOutIcon } from "lucide-react";
 import { logoutApi } from "@/services/api/auth";
 import toast from "react-hot-toast";
@@ -47,7 +42,7 @@ export default function SideBar() {
                 <div
                 className="text-4xl font-bold flex items-center justify-center gap-4 m-2 p-2 mr-14"
                 >
-                    <Brain /> Second Brain
+                    <Brain size="size-10"/> Second Brain
                 </div>
 
                 <button
