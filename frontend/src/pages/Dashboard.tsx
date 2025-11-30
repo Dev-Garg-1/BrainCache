@@ -2,8 +2,42 @@ import Plus from "@/components/icons/Plus";
 import Share from "@/components/icons/Share";
 import Card from "@/components/myComp/Card";
 import SideBar from "@/components/myComp/Sidebar";
+import { getContentApi } from "@/services/api/content";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
+type ContentData = {
+    title: string;
+    link: string;
+    description?: string;
+    _id: string;
+}
 
 export default function Dashboard() {
+    const [contentData, setContentData] = useState<ContentData[]>([]);
+
+    const fetchAllContent = async () => {
+        try {
+            const res = await getContentApi();
+
+            console.log("fetched content success : ", res.data);
+
+            setContentData(res.data.data)
+
+            toast.success("All Content fetched successfully !!")
+        } catch (error: any) {
+            console.error("content fetching error : ", error);
+
+            const msg = error.resopnse?.data?.message || "Something went wrong while fetching the contents, pls refresh the window !!"
+
+            toast.error(msg)
+        }
+    }
+
+    useEffect(() => {
+        fetchAllContent();
+    }, [])
+
     return (
         <div className="flex min-h-screen">
             <SideBar />
@@ -31,9 +65,11 @@ export default function Dashboard() {
                 </div>
 
                 <div
-                className="p-2 m-2"
+                className="p-2 m-2 grid grid-cols-3"
                 >
-                    <Card title={"First Note"} link={"https://x.com/"} description={"Hello this is a test description to check what happens if a long description comes in"}/>
+                    {contentData.map(item => {
+                        return <Card key={item._id} title={item.title} link={item.link} description={item.description} id={item._id} />
+                    })}
                 </div>
 
             </div>

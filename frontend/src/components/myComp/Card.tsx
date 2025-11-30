@@ -1,17 +1,40 @@
+import { useAuth } from "@/context/AuthContext";
 import Delete from "../icons/Delete";
 import Share from "../icons/Share";
 import Update from "../icons/Update";
+import { deleteContentApi } from "@/services/api/content";
+import toast from "react-hot-toast";
 
 type CardProps = {
+    id: string
     title: string;
     link: string;
     description?: string;
 }
 
 export default function Card(props: CardProps) {
+    const {user} = useAuth();
 
-    const handleContentDelete = () => {
+    const handleContentDelete = async (id: string) => {
+        const userId = user?._id as string;
 
+        try {
+            const res = await deleteContentApi({_id: id, userId: userId})
+
+            console.log("content delete successfull : ", res.data);
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000)
+
+            toast.success("Content Deleted successfully !!")
+        } catch (error: any) {
+            console.error("content delete error : ", error)
+
+            const msg = error.response?.data?.message || "Something went wrong while deleting the content !!"
+
+            toast.error(msg);
+        }
     }
 
     const handleContentUpdate = () => {
@@ -24,10 +47,10 @@ export default function Card(props: CardProps) {
 
     return (
         <div
-        className="w-[25%] border-2 rounded-2xl bg-teal-200 border-black p-2 m-2"
+        className="w-fit border-2 rounded-2xl bg-teal-200 border-black p-2 m-2"
         >
             <div
-            className="flex justify-between p-2 m-2"
+            className="flex justify-between gap-8 p-2 m-2"
             >
                 <div
                 className="font-bold text-2xl"
@@ -54,7 +77,7 @@ export default function Card(props: CardProps) {
 
                     <button
                     className="cursor-pointer transition ease-in-out hover:scale-110 hover:-translate-y-1"
-                    onClick={handleContentDelete}
+                    onClick={() => handleContentDelete(props.id)}
                     >
                         <Delete />
                     </button>
