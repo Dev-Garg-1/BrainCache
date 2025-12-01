@@ -2,6 +2,7 @@ import { useAuth } from "@/context/AuthContext";
 import {Delete, Share, Update} from "../icons/icons"
 import { deleteContentApi } from "@/services/api/content";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 type CardProps = {
     id: string
@@ -45,13 +46,13 @@ export default function Card(props: CardProps) {
 
     return (
         <div
-        className="w-fit border-2 rounded-2xl bg-teal-200 border-black p-2 m-2"
+        className="max-w-md border-2 rounded-2xl bg-teal-200 border-black p-2 m-2 wrap-break-word break-all break-inside-avoid mb-4"
         >
             <div
             className="flex justify-between gap-8 p-2 m-2"
             >
                 <div
-                className="font-bold text-2xl"
+                className="font-bold text-2xl wrap-break-word"
                 >
                     {props.title}
                 </div>
@@ -83,13 +84,15 @@ export default function Card(props: CardProps) {
             </div>
 
             <div
-            className="p-2 m-2"
+            className="p-2 m-2 wrap-break-word text-lg text-blue-400"
             >
-                {props.link}
+                <Link to={props.link}>
+                    {props.link}
+                </Link>
             </div>
 
             <div
-            className="p-2 m-2"
+            className="p-2 m-2 whitespace-pre-wrap wrap-break-word max-h-40 overflow-y-auto"
             >
                 {props.description}
             </div>

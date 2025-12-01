@@ -38,7 +38,7 @@ export default function SideBar() {
 
     return (
         <div>
-            <div className="border-r-2 min-h-screen border-black w-fit p-2 flex flex-col bg-teal-200">
+            <div className="border-r-2 border-black w-fit p-2 flex flex-col bg-teal-200 h-full">
                 <div
                 className="text-4xl font-bold flex items-center justify-center gap-4 m-2 p-2 mr-14"
                 >
