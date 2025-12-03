@@ -63,6 +63,12 @@ export default function AuthCard({
           <Link to={"/login"} className="underline underline-offset-4">Login</Link>
         </div>
         }
+
+        <div>
+          <Link to={'/'} className="mt-4 text-center text-sm underline underline-offset-4">
+            Back to Home Page
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   )

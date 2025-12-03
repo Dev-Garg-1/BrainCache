@@ -4,7 +4,7 @@ import SideBar from "@/components/myComp/Sidebar";
 import { getContentApi } from "@/services/api/content";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ContentModal from "./ContentModal";
+import AddContentModal from "./AddContentModal";
 
 type ContentData = {
     title: string;
@@ -79,7 +79,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <ContentModal 
+            <AddContentModal 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
             />

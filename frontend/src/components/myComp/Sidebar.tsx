@@ -42,7 +42,7 @@ export default function SideBar() {
                 <div
                 className="text-4xl font-bold flex items-center justify-center gap-4 m-2 p-2 mr-14"
                 >
-                    <Brain size="size-10"/> Second Brain
+                    <Brain size="size-10"/> Brain Cache
                 </div>
 
                 <button

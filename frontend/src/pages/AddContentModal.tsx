@@ -2,12 +2,12 @@ import { addContentApi } from "@/services/api/content";
 import { useState } from "react"
 import toast from "react-hot-toast";
 
-interface ModalProps {
+export interface ModalProps {
     isOpen: boolean;
     onClose: () => void
 }
 
-export default function ContentModal(props: ModalProps) {
+export default function AddContentModal(props: ModalProps) {
     const [title, setTitle] = useState("")
     const [link, setLink] = useState("")
     const [description, setDescription] = useState("")
@@ -24,11 +24,6 @@ export default function ContentModal(props: ModalProps) {
     const handleContentAdd = async () => {
         if(!title || !link) {
             toast.error("Both title and link fields are needed !!")
-            return;
-        }
-
-        if(title.length > 18) {
-            toast.error("The length of the Title must be less than 18 characters !!")
             return;
         }
 
