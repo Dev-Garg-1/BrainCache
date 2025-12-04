@@ -3,6 +3,8 @@ import {
     addContent, 
     deleteContent, 
     getContent, 
+    shareContent, 
+    unShareContent, 
     updateContent 
 } from "../controllers/content.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -28,5 +30,15 @@ router.route("/update").patch(
     verifyJWT, 
     updateContent
 );
+
+router.route('/share').post(
+    verifyJWT,
+    shareContent
+)
+
+router.route('/unshare').post(
+    verifyJWT,
+    unShareContent
+)
 
 export default router;

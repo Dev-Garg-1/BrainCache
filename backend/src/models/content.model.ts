@@ -21,6 +21,15 @@ const contentSchema = new Schema<IContent>(
         userId: {
             type: Schema.Types.ObjectId,
             ref: "User"
+        },
+
+        isShare: {
+            type: Boolean,
+            default: false
+        },
+
+        shareId: {
+            type: String
         }
     },
     {

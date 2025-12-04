@@ -5,7 +5,9 @@ export interface IContent {
     title: string;
     link: string;
     description?: string;
-    userId: Schema.Types.ObjectId
+    userId: Schema.Types.ObjectId;
+    isShare: boolean;
+    shareId: string;
 }
 
 export interface IUser {
