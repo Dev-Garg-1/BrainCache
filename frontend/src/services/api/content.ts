@@ -14,7 +14,7 @@ export interface UpdateContentData {
     userId: string
 }
 
-export interface DeleteContentData {
+export interface ContentData {
     _id: string;
     userId: string
 }
@@ -23,6 +23,10 @@ export const addContentApi = (data: AddContentData) => http.post("/content/add",
 
 export const updateContentApi = (data: UpdateContentData) => http.post("/content/update", data)
 
-export const deleteContentApi = (data: DeleteContentData) => http.post("/content/delete", data)
+export const deleteContentApi = (data: ContentData) => http.post("/content/delete", data)
 
 export const getContentApi = () => http.get("/content/get")
+
+export const shareContentApi = (data: ContentData) => http.post("/content/share", data)
+
+export const unshareContentApi = (data: ContentData) => http.post("/content/unshare", data)

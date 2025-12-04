@@ -1,8 +1,9 @@
 import { useAuth } from "@/context/AuthContext";
-import {Delete, Share, Update} from "../icons/icons"
-import { deleteContentApi } from "@/services/api/content";
+import {Delete, Share, Unshare, Update} from "../icons/icons"
+import { deleteContentApi, shareContentApi, unshareContentApi } from "@/services/api/content";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 type CardProps = {
     id: string
@@ -13,6 +14,7 @@ type CardProps = {
 
 export default function Card(props: CardProps) {
     const {user} = useAuth();
+    const [share, setShare] = useState(false)
 
     const handleContentDelete = async (id: string) => {
         const userId = user?._id as string;
@@ -40,8 +42,42 @@ export default function Card(props: CardProps) {
 
     }
 
-    const handleContentShare = () => {
+    const handleContentUnShare = async (id: string) => {
+        const userId = user?._id as string;
 
+        try {
+            const res = await unshareContentApi({_id: id, userId: userId})
+
+            console.log("Content unshared successfully : ", res.data);
+            setShare(false)
+
+            toast.success("Content share id disposed off successfully !!")
+        } catch (error: any) {
+            console.error("content unshare error : ", error)
+
+            const msg = error.response?.data?.message || "Something went wrong while unsharing the content !!"
+
+            toast.error(msg);
+        }
+    }
+
+    const handleContentShare = async (id: string) => {
+        const userId = user?._id as string;
+
+        try {
+            const res = await shareContentApi({_id: id, userId: userId})
+
+            console.log("Content shared successfully : ", res.data);
+            setShare(true)
+
+            toast.success(`Content share id generated successfully : ${res.data.data.shareId}`)
+        } catch (error: any) {
+            console.error("content share error : ", error)
+
+            const msg = error.response?.data?.message || "Something went wrong while sharing the content !!"
+
+            toast.error(msg);
+        }
     }
 
     return (
@@ -60,12 +96,21 @@ export default function Card(props: CardProps) {
                 <div
                 className="flex gap-4"
                 >
-                    <button
+                    {share 
+                    ? <button
+                        className="cursor-pointer transition ease-in-out hover:scale-110 hover:-translate-y-1"
+                        onClick={() => handleContentUnShare(props.id)}
+                        >
+                            <Unshare />
+                    </button>
+                    : <button
                     className="cursor-pointer transition ease-in-out hover:scale-110 hover:-translate-y-1"
-                    onClick={handleContentShare}
+                    onClick={() => handleContentShare(props.id)}
                     >
                         <Share />
                     </button>
+                    }
+                    
 
                     <button
                     className="cursor-pointer transition ease-in-out hover:scale-110 hover:-translate-y-1"
