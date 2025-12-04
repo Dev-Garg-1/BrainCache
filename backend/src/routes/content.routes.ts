@@ -42,7 +42,7 @@ router.route('/unshare').post(
     unShareContent
 )
 
-router.route('/getSharedContent').get(
+router.route('/getSharedContent').post(
     getContentByShareId
 )
 

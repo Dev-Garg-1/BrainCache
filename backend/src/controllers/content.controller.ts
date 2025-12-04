@@ -303,6 +303,8 @@ const shareContent = asyncHandler(async (req, res) => {
                 message: error
             }
         )
+    } finally {
+        session.endSession();
     }
 })
 
@@ -332,7 +334,11 @@ const unShareContent = asyncHandler(async (req, res) => {
         )
     }
 
+    const session = await mongoose.startSession();
+
     try {
+        session.startTransaction();
+
         const unShareContent = await Content.findByIdAndUpdate(
             _id, 
             
@@ -342,11 +348,14 @@ const unShareContent = asyncHandler(async (req, res) => {
             },
 
             {
-                new: true
+                new: true,
+                session
             }
         )
 
         if(!unShareContent) {
+            await session.abortTransaction();
+
             return res
             .status(500)
             .json(
@@ -356,6 +365,25 @@ const unShareContent = asyncHandler(async (req, res) => {
                 }
             )
         }
+
+        const updateShareCollection = await Share.findOneAndDelete({
+            contentId: _id
+        }, {session})
+
+        if(!updateShareCollection) {
+            await session.abortTransaction();
+
+            return res
+            .status(500)
+            .json(
+                {
+                    success: false,
+                    message: "Something went wrong while deleting the shared content id from the share collection !!"
+                }
+            )
+        }
+
+        await session.commitTransaction();
 
         return res
         .status(200)
@@ -376,6 +404,8 @@ const unShareContent = asyncHandler(async (req, res) => {
                 message: error
             }
         )
+    } finally {
+        session.endSession();
     }
 })
 
@@ -413,7 +443,7 @@ const getContentByShareId = asyncHandler(async (req, res) => {
 
         const relatedContent = await Content.findById(
             relatedContentId
-        )
+        ).select("-userId -createdAt -updatedAt -__v -isShare -shareId")
 
         if(!relatedContent) {
             return res

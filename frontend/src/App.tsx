@@ -5,6 +5,7 @@ import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute'
 import { useAuth } from './context/AuthContext'
+import ShareContent from './pages/ShareContent'
 
 function App() {
 
@@ -32,6 +33,11 @@ function App() {
           element={
           !user ? <Login /> : <Navigate to='/dashboard' />
           } />
+
+          <Route 
+          path='/share/content/:shareId'
+          element={<ShareContent />}
+          />
 
           <Route 
           path='/dashboard'

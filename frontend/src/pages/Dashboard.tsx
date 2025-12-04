@@ -11,6 +11,7 @@ type ContentData = {
     link: string;
     description?: string;
     _id: string;
+    isShare: boolean
 }
 
 export default function Dashboard() {
@@ -74,6 +75,7 @@ export default function Dashboard() {
                             link={item.link}
                             description={item.description}
                             id={item._id}
+                            isShare={item.isShare}
                         />
                     ))}
                 </div>

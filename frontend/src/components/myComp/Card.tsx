@@ -3,18 +3,17 @@ import {Delete, Share, Unshare, Update} from "../icons/icons"
 import { deleteContentApi, shareContentApi, unshareContentApi } from "@/services/api/content";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 type CardProps = {
     id: string
     title: string;
     link: string;
     description?: string;
+    isShare: boolean
 }
 
 export default function Card(props: CardProps) {
     const {user} = useAuth();
-    const [share, setShare] = useState(false)
 
     const handleContentDelete = async (id: string) => {
         const userId = user?._id as string;
@@ -49,9 +48,12 @@ export default function Card(props: CardProps) {
             const res = await unshareContentApi({_id: id, userId: userId})
 
             console.log("Content unshared successfully : ", res.data);
-            setShare(false)
 
             toast.success("Content share id disposed off successfully !!")
+
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
         } catch (error: any) {
             console.error("content unshare error : ", error)
 
@@ -68,7 +70,6 @@ export default function Card(props: CardProps) {
             const res = await shareContentApi({_id: id, userId: userId})
 
             console.log("Content shared successfully : ", res.data);
-            setShare(true)
 
             toast.success(`Content share id generated successfully : ${res.data.data.shareId}`)
         } catch (error: any) {
@@ -96,7 +97,7 @@ export default function Card(props: CardProps) {
                 <div
                 className="flex gap-4"
                 >
-                    {share 
+                    {props.isShare 
                     ? <button
                         className="cursor-pointer transition ease-in-out hover:scale-110 hover:-translate-y-1"
                         onClick={() => handleContentUnShare(props.id)}
