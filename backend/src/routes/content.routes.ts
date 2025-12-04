@@ -3,6 +3,7 @@ import {
     addContent, 
     deleteContent, 
     getContent, 
+    getContentByShareId, 
     shareContent, 
     unShareContent, 
     updateContent 
@@ -39,6 +40,10 @@ router.route('/share').post(
 router.route('/unshare').post(
     verifyJWT,
     unShareContent
+)
+
+router.route('/getSharedContent').get(
+    getContentByShareId
 )
 
 export default router;

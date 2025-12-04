@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import { Content } from "../models/content.model.js";
+import { Share } from "../models/share.model.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import type { AddResourceBody, DeleteResourceBody, UpdateResourceBody } from "../utils/interfaces.js";
@@ -226,7 +228,11 @@ const shareContent = asyncHandler(async (req, res) => {
     const slug = uuidv4();
     const shareId = `http://localhost:5173/share/content/${slug}`
 
+    const session = await mongoose.startSession();
+
     try {
+        session.startTransaction();
+
         const shareIdCreated = await Content.findByIdAndUpdate(
             _id, 
 
@@ -236,11 +242,14 @@ const shareContent = asyncHandler(async (req, res) => {
             }, 
 
             {
-                new: true
+                new: true,
+                session
             }
         )
 
         if(!shareIdCreated) {
+            await session.abortTransaction();
+
             return res
             .status(500)
             .json(
@@ -250,6 +259,29 @@ const shareContent = asyncHandler(async (req, res) => {
                 }
             )
         }
+
+        const shareIdSave = await Share.create(
+            [{
+                contentId: _id,
+                shareId: shareId
+            }],
+            {session}
+        )
+
+        if(!shareIdSave) {
+            await session.abortTransaction();
+
+            return res
+            .status(500)
+            .json(
+                {
+                    success: false,
+                    message: "Something went wrong while saving the shareId to the Share collection."
+                }
+            )
+        }
+
+        await session.commitTransaction();
 
         return res
         .status(201)
@@ -347,11 +379,82 @@ const unShareContent = asyncHandler(async (req, res) => {
     }
 })
 
+const getContentByShareId = asyncHandler(async (req, res) => {
+    const {shareId} = req.body;
+
+    if(!shareId) {
+        return res
+        .status(400)
+        .json(
+            {
+                success: false,
+                message: "Pls provide the shareId of the shared content to see it !!"
+            }
+        )
+    }
+
+    try {
+        const existingShareId = await Share.findOne({
+                shareId: shareId
+        })
+
+        if(!existingShareId) {
+            return res
+            .status(400)
+            .json(
+                {
+                    success: false,
+                    message: "such shareId does not exists !!"
+                }
+            )
+        }
+
+        const relatedContentId = existingShareId.contentId
+
+        const relatedContent = await Content.findById(
+            relatedContentId
+        )
+
+        if(!relatedContent) {
+            return res
+            .status(500)
+            .json(
+                {
+                    success: false,
+                    message: "Something went wrong while fetching the shared content !!"
+                }
+            )
+        }
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                relatedContent,
+                "Content found successfully !!"
+            )
+        )
+    } catch (error) {
+        console.error("shared content fetching error : ", error) 
+        
+        return res
+        .status(500)
+        .json(
+            {
+                success: false,
+                message: error
+            }
+        )
+    }
+})
+
 export {
     addContent,
     deleteContent,
     updateContent,
     getContent,
     shareContent,
-    unShareContent
+    unShareContent,
+    getContentByShareId
 }

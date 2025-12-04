@@ -22,6 +22,12 @@ export interface IUser {
     isPasswordCorrect: (password: string) => Promise<boolean>
 }
 
+export interface IShare {
+    _id: Types.ObjectId;
+    shareId: string;
+    contentId: Schema.Types.ObjectId;
+}
+
 export interface AddResourceBody {
     title: string;
     link: string;
