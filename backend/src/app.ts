@@ -1,9 +1,11 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import { CORS_ORIGIN } from "./config/config.js";
+// import { CORS_ORIGIN } from "./config/config.js";
 
 const app = express();
+
+const CORS_ORIGIN = "https://brain-cache-dev-garg.vercel.app"
 
 app.use(cors({
     origin: CORS_ORIGIN,
