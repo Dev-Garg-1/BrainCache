@@ -226,7 +226,8 @@ const shareContent = asyncHandler(async (req, res) => {
     }
 
     const slug = uuidv4();
-    const shareId = `http://localhost:5173/share/content/${slug}`
+    // const shareId = `http://localhost:5173/share/content/${slug}`
+    const shareId = `https://brain-cache-dev-garg.vercel.app/share/content/${slug}`
 
     const session = await mongoose.startSession();
 

@@ -15,7 +15,8 @@ export default function ShareContent() {
     const [noShareId, setNoShareId] = useState(false)
     const params = useParams();
 
-    const shareId = `http://localhost:5173/share/content/${params.shareId}`
+    // const shareId = `http://localhost:5173/share/content/${params.shareId}`
+    const shareId = `https://brain-cache-dev-garg.vercel.app/share/content/${params.shareId}`
 
     const getSharedContent = async () => {
         if(!params.shareId) {
