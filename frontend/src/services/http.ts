@@ -2,7 +2,7 @@ import axios from "axios";
 
 // creating an instance of axios
 export const http = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: "https://braincache-vdfm.onrender.com/api/v1",
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
