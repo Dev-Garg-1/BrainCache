@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AddContentModal from "./AddContentModal";
 
-type ContentData = {
+export type ContentData = {
     title: string;
     link: string;
     description?: string;
@@ -107,6 +107,9 @@ export default function Dashboard() {
             <AddContentModal 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
+                onContentAdded={(newContent) =>
+                    setContentData(prev => [...prev, newContent])
+                }
             />
 
         </div>

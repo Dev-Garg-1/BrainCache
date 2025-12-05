@@ -1,10 +1,13 @@
 import { addContentApi } from "@/services/api/content";
 import { useState } from "react"
 import toast from "react-hot-toast";
+import type { ContentData } from "./Dashboard";
+
 
 export interface ModalProps {
     isOpen: boolean;
     onClose: () => void
+    onContentAdded: (newContent: ContentData) => void;
 }
 
 export default function AddContentModal(props: ModalProps) {
@@ -39,7 +42,16 @@ export default function AddContentModal(props: ModalProps) {
 
             toast.success("Content Added successfully !!")
 
-            window.location.reload();
+            // Use callback to update parent state
+            props.onContentAdded(res.data.data);
+
+            // Close the modal
+            props.onClose();
+
+            // Reset local fields
+            setTitle("");
+            setLink("");
+            setDescription("");
         } catch (error: any) {
             console.log("content adding error: ", error);
 
