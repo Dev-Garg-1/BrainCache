@@ -18,6 +18,11 @@ http.interceptors.request.use(
             data: config.data
         });
 
+        const token = localStorage.getItem("accessToken"); 
+        if(token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+
         return config;
     },
 
