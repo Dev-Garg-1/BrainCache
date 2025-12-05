@@ -36,6 +36,26 @@ export default function Dashboard() {
         }
     }
 
+    const handleDeleteUI = (id: string) => {
+        setContentData(prev => prev.filter(item => item._id !== id))
+    }
+
+    const handleUnshareUI = (id: string) => {
+        setContentData(prev =>
+            prev.map(item =>
+                item._id === id ? { ...item, isShare: false, shareId: null } : item
+            )
+        );
+    };
+
+    const handleShareUI = (id: string, shareId: string) => {
+        setContentData(prev =>
+            prev.map(item =>
+                item._id === id ? { ...item, isShare: true, shareId } : item
+            )
+        );
+    };
+
     useEffect(() => {
         fetchAllContent();
     }, [])
@@ -76,6 +96,9 @@ export default function Dashboard() {
                             description={item.description}
                             id={item._id}
                             isShare={item.isShare}
+                            onShare={handleShareUI}
+                            onDelete={handleDeleteUI}
+                            onUnshare={handleUnshareUI}
                         />
                     ))}
                 </div>

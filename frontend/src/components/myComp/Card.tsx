@@ -9,7 +9,11 @@ type CardProps = {
     title: string;
     link: string;
     description?: string;
-    isShare: boolean
+    isShare: boolean;
+
+    onDelete: (id: string) => void
+    onShare: (id: string, shareId: string) => void
+    onUnshare: (id: string) => void
 }
 
 export default function Card(props: CardProps) {
@@ -23,9 +27,11 @@ export default function Card(props: CardProps) {
 
             console.log("content delete successfull : ", res.data);
 
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000)
+            // setTimeout(() => {
+            //     window.location.reload();
+            // }, 1000)
+
+            props.onDelete(props.id)
 
             toast.success("Content Deleted successfully !!")
         } catch (error: any) {
@@ -51,9 +57,11 @@ export default function Card(props: CardProps) {
 
             toast.success("Content share id disposed off successfully !!")
 
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 1000)
+
+            props.onUnshare(id)
         } catch (error: any) {
             console.error("content unshare error : ", error)
 
@@ -72,6 +80,8 @@ export default function Card(props: CardProps) {
             console.log("Content shared successfully : ", res.data);
 
             toast.success(`Content share id generated successfully : ${res.data.data.shareId}`)
+
+            props.onShare(id, res.data.data.shareId);
         } catch (error: any) {
             console.error("content share error : ", error)
 
