@@ -8,9 +8,9 @@ The backend is built with **Node.js**, **Express**, **TypeScript**, and **MongoD
 
 ## Screenshots
 
-- `![Postman Screens](./screenshots/postman-login.png)`
-- `![Postman Screens](./screenshots/postman-cookie.png)`
-- `![Postman Screens](./screenshots/postman-getContent.png)`
+- ![Postman Screens](./screenshots/postman-login.png)
+- ![Postman Screens](./screenshots/postman-cookie.png)
+- ![Postman Screens](./screenshots/postman-getContent.png)
 
 ---
 
