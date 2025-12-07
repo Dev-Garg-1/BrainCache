@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# BrainCache Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend single-page application (SPA) for BrainCache, a personal "second brain" for storing useful links (articles, tweets, videos, etc.) in one place instead of sending them to yourself on WhatsApp.
 
-Currently, two official plugins are available:
+The app is built with **React**, **TypeScript**, and **Vite**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Screenshots
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `![Landing page](./screenshots/landing.png)`
+- `![Login page](./screenshots/login.png)`
+- `![Dashboard with saved links](./screenshots/dashboard.png)`
+- `![Public share view](./screenshots/share-page.png)`
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Project structure (high level)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Key pieces under `frontend/src/`:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `main.tsx`
+  - React entrypoint
+  - Wraps the app in `AuthProvider` and renders `App`
+  - Mounts `react-hot-toast`'s `Toaster` for notifications
+- `App.tsx`
+  - Configures routing with `react-router-dom`:
+    - `/login` – login page
+    - `/signup` – sign-up page
+    - `/dashboard` – main authenticated dashboard (wrapped in `PrivateRoute`)
+    - `/share/content/:shareId` – public read-only view for a shared item
+    - `/*` – default route that sends unauthenticated users to login, and authenticated users to `/dashboard`
+- `context/AuthContext.tsx`
+  - Holds the current user (`{ name, username, email, _id }`) in React state
+  - Initializes from `localStorage.getItem('user')`
+  - Persists updates back to `localStorage`
+  - Exposes a `useAuth()` hook; throws if used outside `AuthProvider`
+- `services/http.ts`
+  - Shared Axios instance configured with:
+    - `baseURL` pointing at the deployed backend API
+    - `withCredentials: true` so cookies are sent/received
+    - Request interceptor that logs requests and attaches `Authorization: Bearer <accessToken>` from `localStorage`
+    - Response interceptor that logs responses and surfaces network/time-out error details
+- `pages/`
+  - `Login.tsx` – login form, calls the auth API, stores the user in context + `localStorage`, navigates to `/dashboard`
+  - `Signup.tsx` – user registration flow (paired with backend `/signup`)
+  - `Dashboard.tsx` – core experience for browsing saved content, sharing/unsharing, and deleting items
+  - `AddContentModal.tsx` – modal used by the dashboard to add new content items
+  - `ShareContent.tsx` – uses the `shareId` route parameter to render a public read-only view of a shared item
+  - `LandingPage.tsx` – marketing/landing page combining `Navbar` + `Hero`
+- `components/`
+  - Shared UI pieces such as navigation, hero section, auth card, and the `PrivateRoute` component that protects `/dashboard`
+- `hooks/`, `lib/`
+  - Custom hooks and small utility helpers
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+TypeScript path aliases are defined in `frontend/tsconfig.json` so `@/` resolves to `frontend/src/`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Scripts
+
+From the `frontend/` directory:
+
+- `npm install` – install dependencies
+- `npm run dev` – start Vite dev server
+- `npm run build` – type-check + production build
+- `npm run lint` – run ESLint rules
+- `npm run preview` – preview the production build locally
+
+---
+
+## Connecting to the backend
+
+The frontend uses a shared Axios instance defined in `src/services/http.ts`:
+
+- `baseURL` is currently set to the deployed API URL: `https://braincache-vdfm.onrender.com/api/v1`
+- `withCredentials: true` so that HTTP-only cookies from the backend are sent on requests
+- A request interceptor attaches `Authorization: Bearer <accessToken>` if an `accessToken` value is present in `localStorage`
+
+If you are running the backend locally (for example at `http://localhost:8000/api/v1`), update the `baseURL` in `http.ts` accordingly.
+
+---
+
+## Authentication flow
+
+1. User signs up or logs in via the backend auth endpoints (`/signup`, `/login`).
+2. On successful login:
+   - The backend sets `accessToken` and `refreshToken` cookies.
+   - The frontend stores the returned user object in `AuthContext` and `localStorage`.
+3. Subsequent requests use:
+   - Cookies for backend verification
+   - `Authorization: Bearer <accessToken>` header added by the Axios interceptor
+4. Protected routes (`/dashboard`) are wrapped in `PrivateRoute`, which redirects to `/login` if no user is present in context.
+
+---
+
+## How the UI matches the product idea
+
+- When you find a useful link online, you can log in and save it via the "Add Content" flow on the dashboard.
+- Each saved item shows up in the dashboard list with its title/link/description.
+- From the dashboard, you can:
+  - Share an item to generate a public URL (handled via the backend share endpoints)
+  - Unshare or delete items while keeping the UI in sync with server state
+- The public `/share/content/:shareId` route renders a read-only view for anyone with the link.
+- A future enhancement is a **search bar** on the dashboard page that would call a backend search endpoint to filter items by title, description, or link, so users can retrieve things they saved some time back.
