@@ -4,18 +4,6 @@ This is the frontend single-page application (SPA) for BrainCache, a personal "s
 
 The app is built with **React**, **TypeScript**, and **Vite**.
 
----
-
-## Screenshots
-
-- `![Landing page](./screenshots/landing.png)`
-- `![Login page](./screenshots/login.png)`
-- `![Dashboard with saved links](./screenshots/dashboard.png)`
-- `![Public share view](./screenshots/share-page.png)`
-
-
----
-
 ## Project structure (high level)
 
 Key pieces under `frontend/src/`:
