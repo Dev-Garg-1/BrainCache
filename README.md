@@ -18,15 +18,15 @@ You can log in, add content with a title/link/description, browse it later in a 
 
 ## Screenshots
 
-- Signup 
-  - `![Signup Page](./screenshots/signup.png)`
-- Login 
-  - `![login Page](./screenshots/login.png)`
-- Dashboard with saved links
-  - `![Dashboard](./screenshots/dashboard.png)`
-- Public share view
-  - `![Share page](./screenshots/share-1.png)`
-  - `![Share page](./screenshots/share-2.png)`
+- Signup  
+  - ![Signup Page](./screenshots/signup.png)
+- Login  
+  - ![Login Page](./screenshots/login.png)
+- Dashboard with saved links  
+  - ![Dashboard](./screenshots/dashboard.png)
+- Public share view  
+  - ![Share page](./screenshots/share-1.png)
+  - ![Share page](./screenshots/share-2.png)
 
 ---
 
